@@ -9,6 +9,9 @@ quandl offers many free and paid datasets, some can be accessed anonymously, whi
 
 *Note:* If a particular static/historic dataset is used in search, it is suggested to create a saved search that will run on a set interval of time, such that outputs of `quandl` command will output to a CSV file to be used as lookup.
 
+## Screenshot
+![textmate](https://raw.github.com/textmate/textmate/gh-pages/images/screenshot.png)
+
 ##System requirements
 command was tested on Splunk 6.2+ on CentOS Linux 7.1. Splunk python is used, without other dependencies, therefore command *should* work on other Splunk supported platforms.
 
@@ -19,6 +22,9 @@ command was tested on Splunk 6.2+ on CentOS Linux 7.1. Splunk python is used, wi
 Command implements arguments listed below. There are two types or arguments for this command, **debug** and **metadata** that are unique to the command, the second is quandl supported arguments; see full description and usage detail at https://www.quandl.com/docs/api?json#retrieve-data
 
 ```debug=<bool> | metadata=<bool> | auth_token=<quandl_auth_token> | limit=<int> | rows=<int> | column_index=<int> | start_date=<yyyy-mm-dd> | end_date=<yyyy-mm-dd> | order=<asc|desc> | collapse=<none|daily|weekly|monthly|quarterly|annual> | transform=<none|diff|rdiff|cumul|normalize>```
+
+## Screenshot
+![quandl command for splunk ](https://raw.githubusercontent.com/hire-vladimir/SA-quandl/master/static/quand.gif)
 
 ##Examples
 * will pull down "Wiki EOD Stock Prices" dataset, https://www.quandl.com/data/WIKI, for Splunk (SPLK) stock using quandl auth_token of XXXXXXXXXXXXXXXXXXXX; auth_token option overwrites the default configured key
