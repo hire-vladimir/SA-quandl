@@ -1,5 +1,5 @@
 #Welcome
-`quandl` command for Splunk allows import of datasets found on https://www.quandl.com right into Splunk for further processing and analysis; via quandl v3 API to return records.
+`quandl` command for Splunk allows import of datasets found on https://www.quandl.com right into Splunk for further processing and analysis; via quandl v3 API to return records. Gain instant access to 10s of millions of datasets across 100s of unique databases!
 
 #Install
 App installation is simple, and only needs to be present on the search head. Documentation around app installation can be found at http://docs.splunk.com/Documentation/AddOns/released/Overview/Singleserverinstall
