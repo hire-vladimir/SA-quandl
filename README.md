@@ -21,9 +21,11 @@ The command was tested on Splunk 6.2+ on CentOS Linux 7.1. Splunk python is used
 `quandl (<options>)* (<auth_key>)? "<quandl_code>"`
 
 ##Command arguments (optional)
-Command implements arguments listed below. There are two types of arguments for this command, **debug** and **metadata** that are unique to the command, the second is quandl supported arguments; see full description and usage detail at https://www.quandl.com/docs/api?json#retrieve-data. Command fully supports *quandl v3* API.
+Command implements arguments listed below. There are two types of arguments for this command, **debug**, **metadata**, **convert_time** that are unique to the command, rest are *quandl API* supported arguments; see full description and usage detail at https://www.quandl.com/docs/api?json#retrieve-data. Command fully supports *quandl v3* API.
 
-```debug=<bool> | metadata=<bool> | auth_token=<quandl_auth_token> | limit=<int> | rows=<int> | column_index=<int> | start_date=<yyyy-mm-dd> | end_date=<yyyy-mm-dd> | order=<asc|desc> | collapse=<none|daily|weekly|monthly|quarterly|annual> | transform=<none|diff|rdiff|cumul|normalize>```
+When column names such as `['Date', 'Year', 'Month']` are detected, command will attempt to convert time to epoch for use with Splunk's `_time`. If this behavior is not desired, set **convert_time=f** argument.
+
+```debug=<bool> | metadata=<bool> | convert_time=<bool> | auth_token=<quandl_auth_token> | limit=<int> | rows=<int> | column_index=<int> | start_date=<yyyy-mm-dd> | end_date=<yyyy-mm-dd> | order=<asc|desc> | collapse=<none|daily|weekly|monthly|quarterly|annual> | transform=<none|diff|rdiff|cumul|normalize>```
 
 ##Examples
 * Will pull down "Wiki EOD Stock Prices" dataset, https://www.quandl.com/data/WIKI, for Splunk (SPLK) stock using quandl auth_token of XXXXXXXXXXXXXXXXXXXX; auth_token option overwrites the default configured key.
@@ -48,7 +50,7 @@ Command implements arguments listed below. There are two types of arguments for 
 ```
 * Pull down historical stock data for Splunk stock, chart low and high price over time.
 ```
-| quandl "WIKI/SPLK" | eval _time=strptime(Date, "%Y-%m-%d") | timechart span=7d latest(High) as price_high latest(Low) AS price_low
+| quandl "WIKI/SPLK" | timechart span=7d latest(High) as price_high latest(Low) AS price_low
 ```
 
 #Troubleshooting

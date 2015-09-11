@@ -67,7 +67,7 @@ def die(msg):
     exit(msg)
 
 
-def quandl2splunk(quandl_data, show_info=False):
+def quandl2splunk(quandl_data, show_info=False, convert_time=True):
     payload = []
     quandl_code = "%s/%s" % (quandl_data['dataset']['database_code'], quandl_data['dataset']['dataset_code'])
     headers = quandl_data['dataset']['column_names']
@@ -83,7 +83,11 @@ def quandl2splunk(quandl_data, show_info=False):
             d = quandl_data['dataset']['data'][r]
 
             for x in range(0, len(headers)):
-                row[headers[x].replace(" ", "_")] = d[x]
+                h = headers[x].replace(" ", "_")
+                row[h] = d[x]
+                if convert_time and (h in ['Date', 'Year', 'Month'] and re.match("^\d{4}-\d{2}-\d{2}$", d[x])):
+                    row['_time'] = time.mktime(time.strptime(d[x], "%Y-%m-%d"))  # derive epoc from date
+
             payload.append(row)
     logger.debug('quandl2splunk data="%s"' % payload)
 
@@ -94,7 +98,7 @@ def validate_args(keywords, argvals):
     logger.info('function="validate_args" calling getKeywordsAndOptions keywords="%s" args="%s"' % (str(keywords), str(argvals)))
 
     # validate args
-    ALLOWED_OPTIONS = ['debug', 'metadata', 'auth_token', 'limit', 'rows', 'column_index', 'start_date', 'end_date', 'order', 'collapse', 'transform']
+    ALLOWED_OPTIONS = ['debug', 'metadata', 'convert_time', 'auth_token', 'limit', 'rows', 'column_index', 'start_date', 'end_date', 'order', 'collapse', 'transform']
     # MANDATORY_OPTIONS = ['dest']
 
     for opt in argvals:
@@ -182,8 +186,12 @@ if __name__ == '__main__':
                 quandl_uri = "https://www.quandl.com/api/v3/datasets/%s/%s/metadata.json" % (quandl_database, set)
             logger.debug('effective uri="%s"' % quandl_uri)
 
+            create_time = True
+            if arg_on_and_enabled(argvals, "convert_time", rex="^(?:f|false|0|no)$"):
+                create_time = False
+
             quandl_data = json.loads(getDataPayload(quandl_uri))
-            uber += quandl2splunk(quandl_data, quandl_show_info)
+            uber += quandl2splunk(quandl_data, quandl_show_info, create_time)
         # keeping all data into single array is waste of memory; need to figure out how to call outputResults multiple times, without adding header each time
         logger.info('sending events to splunk count="%s"' % len(uber))
         si.outputResults(uber)
