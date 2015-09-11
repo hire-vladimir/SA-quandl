@@ -55,7 +55,7 @@ This command writes log data to *$SPLUNK_HOME/var/log/splunk/quandl.log*, meanin
 index=_internal sourcetype=quandl
 ```
 
-When debug level logging is required, pass in *debug=true* argument to the command. This will display enhanced logging in Splunk UI and the log file.
+When debug level logging is required, pass in *debug=true* or *debug=1* argument to the command. This will display enhanced logging in Splunk UI and the log file.
 ```
 ... | quandl debug=1 "WIKI/SPLK"
 ```
