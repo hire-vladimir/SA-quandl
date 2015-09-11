@@ -36,7 +36,7 @@ Command implements arguments listed below. There are two types or arguments for 
 ```
 ... | quandl metadata=true FRED/USARGDPQDSNAQ
 ```
-* using debug option will enable additional logging on the command to help troubleshoot data set pulls. log is written to UI
+* using debug option will enable additional logging on the command to help troubleshoot data set pulls. See [#Troubleshooting] section
 ```
 ... | quandl debug=1 "WIKI/SPLK"
 ```
