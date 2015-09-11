@@ -1,5 +1,5 @@
 #Welcome
-`quandl` command for Splunk allows import of datasets found on https://www.quandl.com right into Splunk for further processing and analysis; via quandl v3 API to return records. Gain instant access to 10s of millions of datasets across 100s of unique databases!
+`quandl` command for Splunk allows import of datasets found on https://www.quandl.com directly into Splunk for further processing and analysis. Gain instant access to 10s of millions of datasets across 100s of unique databases!
 
 #Install
 App installation is simple, and only needs to be present on the search head. Documentation around app installation can be found at http://docs.splunk.com/Documentation/AddOns/released/Overview/Singleserverinstall
@@ -19,7 +19,7 @@ command was tested on Splunk 6.2+ on CentOS Linux 7.1. Splunk python is used, wi
 `quandl (<options>)* (<auth_key>)? <quandl_code>`
 
 ##Command arguments (optional)
-Command implements arguments listed below. There are two types or arguments for this command, **debug** and **metadata** that are unique to the command, the second is quandl supported arguments; see full description and usage detail at https://www.quandl.com/docs/api?json#retrieve-data
+Command implements arguments listed below. There are two types or arguments for this command, **debug** and **metadata** that are unique to the command, the second is quandl supported arguments; see full description and usage detail at https://www.quandl.com/docs/api?json#retrieve-data. Command fully supports *quandl v3* API.
 
 ```debug=<bool> | metadata=<bool> | auth_token=<quandl_auth_token> | limit=<int> | rows=<int> | column_index=<int> | start_date=<yyyy-mm-dd> | end_date=<yyyy-mm-dd> | order=<asc|desc> | collapse=<none|daily|weekly|monthly|quarterly|annual> | transform=<none|diff|rdiff|cumul|normalize>```
 
