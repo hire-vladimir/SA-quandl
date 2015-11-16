@@ -14,7 +14,7 @@ quandl offers many free and paid datasets; some can be accessed anonymously, whi
 *Note:* If a particular static/historic dataset is used in search, it is suggested to create a saved search that will run on a set interval of time, such that outputs of `quandl` command will output to a CSV file to be used as lookup.
 
 ## Screenshot
-![quandl command for splunk](https://raw.githubusercontent.com/hire-vladimir/SA-quandl/master/static/quand.gif)
+![quandl command for splunk](https://raw.githubusercontent.com/hire-vladimir/SA-quandl/master/static/quandl.gif)
 ![quandl command for splunk example](https://raw.githubusercontent.com/hire-vladimir/SA-quandl/master/static/quandl_example.png)
 
 ##System requirements
