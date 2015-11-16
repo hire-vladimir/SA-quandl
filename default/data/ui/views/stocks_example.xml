@@ -1,0 +1,121 @@
+<form>
+  <label>Finance through Splunk</label>
+  <fieldset submitButton="false" autoRun="true">
+    <input type="dropdown" token="code" searchWhenChanged="true">
+      <label>Select Stock</label>
+      <search>
+        <query>| inputlookup stocks.csv</query>
+      </search>
+      <fieldForLabel>stock</fieldForLabel>
+      <fieldForValue>code</fieldForValue>
+      <default>WIKI/SPLK</default>
+    </input>
+    <input type="time" searchWhenChanged="true">
+      <label>Select Timeframe</label>
+      <default>
+        <earliest>1262304000</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <search id="global">
+    <query>| quandl "$code$"</query>
+  </search>
+  <search base="global">
+    <query>| tail 1 | table _time Open Close</query>
+    <preview>
+      <set token="time">$result._time$</set>
+      <set token="Open">$result.Open$</set>
+      <set token="Close">$result.Close$</set>
+    </preview>
+  </search>
+  <search base="global">
+    <query>| addinfo | eval info_max_time=if(info_max_time="+Infinity",9999999999,info_max_time) | where _time &gt;= info_min_time AND _time &lt; info_max_time | sort _time | delta p=1 Close as delta | eval trend = if(delta&gt;0,"Up","Down") | eventstats last(trend) as lasttrend last(_time) as lasttime| WHERE lasttrend!=trend | eval deltatime = round((lasttime-_time) / (24*60*60)) | stats last(Close) as Close last(_time) as _time last(delta)  as delta last(lasttime) as lasttime last(trend) as trend last(lasttrend) as lasttrend last(deltatime) as deltatime</query>
+    <preview>
+      <set token="lasttrend">$result.lasttrend$</set>
+      <set token="deltatime">$result.deltatime$</set>
+    </preview>
+  </search>
+  <row>
+    <panel>
+      <single>
+        <title>Last close price and daily price change</title>
+        <search base="global">
+          <query>| timechart span=1d max(Close) as Close | search Close=*</query>
+        </search>
+        <option name="field">Close</option>
+        <option name="linkView">search</option>
+        <option name="drilldown">none</option>
+        <option name="wrap">true</option>
+        <option name="rowNumbers">false</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="colorBy">trend</option>
+        <option name="colorMode">none</option>
+        <option name="numberPrecision">0.00</option>
+        <option name="rangeColors">["0x65a637","0x6db7c6","0xf7bc38","0xf58f39","0xd93f3c"]</option>
+        <option name="rangeValues">[0,30,70,100]</option>
+        <option name="showSparkline">1</option>
+        <option name="showTrendIndicator">1</option>
+        <option name="trendColorInterpretation">standard</option>
+        <option name="trendDisplayMode">percent</option>
+        <option name="trendInterval">auto</option>
+        <option name="useColors">1</option>
+        <option name="useThousandSeparators">1</option>
+      </single>
+    </panel>
+    <panel>
+      <html>
+      <div>
+        <h4>$code$ first entered the market on $time$ with an opening price of $Open$. It closed at $Close$</h4>
+      </div>
+    </html>
+      <html>
+      <div>
+        <h4>$code$ has been on an $lasttrend$wards trend for $deltatime$ days</h4>
+      </div>
+    </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Stock price over time</title>
+        <search base="global">
+          <query>| addinfo | eval info_max_time=if(info_max_time="+Infinity",9999999999,info_max_time) | eval foo="$time$" | eval bar=strptime(foo,"%Y-%m-%d")| where _time &gt;= max(info_min_time,bar) AND _time &lt; info_max_time | sort _time | delta p=1 Close as delta | eval pctChange=(delta/Close)*100 | eval pctChangeUp=if(pctChange&gt;=0,pctChange,0) | eval pctChangeDown=if(pctChange&lt;=0,pctChange,0) | bucket _time span=1d | stats max(Close) as Close max(pctChangeUp) as pctChangeUp max(pctChangeDown) AS pctChangeDown by _time</query>
+        </search>
+        <option name="wrap">undefined</option>
+        <option name="rowNumbers">undefined</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="count">10</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="charting.fieldColors">{"pctChangeDown":0xFF0000, "pctChangeUp":0x73A550}</option>
+        <option name="height">400px</option>
+        <option name="charting.axisLabelsY.majorUnit">10</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.chart.resultTruncationLimit">5000</option>
+        <option name="charting.chart.overlayFields">Close</option>
+      </chart>
+    </panel>
+  </row>
+</form>

@@ -1,0 +1,17 @@
+<dashboard>
+  <label>Overview</label>
+  
+  <row>
+    <panel>
+      <title>Welcome</title>
+      <html>
+        <p><b>quandl</b> command for Splunk allows import of datasets found on <a href="https://www.quandl.com" target="_blank">https://www.quandl.com</a> directly into Splunk for further processing and analysis. Gain instant access to 10s of millions of datasets across 100s of unique databases!</p>
+        <br />
+        <p>For usage detail, please visit <a href="https://github.com/hire-vladimir/SA-quandl" target="_blank">https://github.com/hire-vladimir/SA-quandl</a></p>
+        <br />
+        <h2>Example</h2>
+        <p>Please see following dashboard for live demo example <a href="stocks_example">here</a></p>
+      </html>
+    </panel>
+  </row>
+</dashboard>
