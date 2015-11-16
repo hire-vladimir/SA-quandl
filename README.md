@@ -15,7 +15,7 @@ quandl offers many free and paid datasets; some can be accessed anonymously, whi
 
 ## Screenshot
 ![quandl command for splunk](https://raw.githubusercontent.com/hire-vladimir/SA-quandl/master/static/quand.gif)
-![quandl command for splunk example](https://raw.githubusercontent.com/hire-vladimir/SA-quandl/master/static/quand_example.png)
+![quandl command for splunk example](https://raw.githubusercontent.com/hire-vladimir/SA-quandl/master/static/quandl_example.png)
 
 ##System requirements
 The command was tested on Splunk 6.2+ on CentOS Linux 7.1. Splunk python is used, without other dependencies, therefore command *should* work on other Splunk supported platforms.
