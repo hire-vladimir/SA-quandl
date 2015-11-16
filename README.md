@@ -3,6 +3,8 @@
 #Welcome
 `quandl` command for Splunk allows import of datasets found on https://www.quandl.com directly into Splunk for further processing and analysis. Gain instant access to 10s of millions of datasets across 100s of unique databases!
 
+This project is hosted on GitHub, see https://github.com/hire-vladimir/SA-quandl
+
 #Install
 App installation is simple, and only needs to be present on the search head. Documentation around app installation can be found at http://docs.splunk.com/Documentation/AddOns/released/Overview/Singleserverinstall
 
@@ -12,7 +14,8 @@ quandl offers many free and paid datasets; some can be accessed anonymously, whi
 *Note:* If a particular static/historic dataset is used in search, it is suggested to create a saved search that will run on a set interval of time, such that outputs of `quandl` command will output to a CSV file to be used as lookup.
 
 ## Screenshot
-![quandl command for splunk ](https://raw.githubusercontent.com/hire-vladimir/SA-quandl/master/static/quand.gif)
+![quandl command for splunk](https://raw.githubusercontent.com/hire-vladimir/SA-quandl/master/static/quand.gif)
+![quandl command for splunk example](https://raw.githubusercontent.com/hire-vladimir/SA-quandl/master/static/quand_example.png)
 
 ##System requirements
 The command was tested on Splunk 6.2+ on CentOS Linux 7.1. Splunk python is used, without other dependencies, therefore command *should* work on other Splunk supported platforms.
@@ -63,6 +66,9 @@ When debug level logging is required, pass in *debug=true* or *debug=1* argument
 ```
 ... | quandl debug=1 "WIKI/SPLK"
 ```
+
+#Credit
+* Genti Zaimi, for the sweet example dashboard
 
 #Legal
 * *quandl* is a registered trademark of quandl.com.
