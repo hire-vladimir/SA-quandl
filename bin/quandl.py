@@ -10,7 +10,7 @@ welcomeText = '''#
 #
 '''
 from urllib2 import urlopen, Request, HTTPError
-import time, os, re, json
+import sys, time, os, re, json
 import logging, logging.handlers
 import splunk.Intersplunk as si
 
@@ -56,7 +56,9 @@ def getDataPayload(uri):
         payload = urlopen(Request(uri)).read()
         logger.debug('Received payload="%s"' % payload)
     except HTTPError, e:
-        die('HTTP exception was thrown while making request for uri="%s", status_code=%s, for list of Quandl status codes see https://www.quandl.com/docs/api?json#http-codes e="%s"' % (uri, e.code, e))
+        msg = 'HTTP exception was thrown while making request for uri="%s", status_code=%s, for list of Quandl status codes see https://www.quandl.com/docs/api?json#http-codes e="%s"' % (uri, e.code, e)
+        logger.error(msg)
+        sys.stderr.write('%s\n' % msg)
 
     logger.info('function="getDataPayload" action="success" request="%s", bytes_in="%s"' % (uri, len(payload)))
     return payload
@@ -190,8 +192,10 @@ if __name__ == '__main__':
             if arg_on_and_enabled(argvals, "convert_time", rex="^(?:f|false|0|no)$"):
                 create_time = False
 
-            quandl_data = json.loads(getDataPayload(quandl_uri))
-            uber += quandl2splunk(quandl_data, quandl_show_info, create_time)
+            set_payload = getDataPayload(quandl_uri)
+            if set_payload is not "":
+                quandl_data = json.loads(set_payload)
+                uber += quandl2splunk(quandl_data, quandl_show_info, create_time)
         # keeping all data into single array is waste of memory; need to figure out how to call outputResults multiple times, without adding header each time
         logger.info('sending events to splunk count="%s"' % len(uber))
         si.outputResults(uber)
