@@ -89,6 +89,10 @@ def quandl2splunk(quandl_data, show_info=False, convert_time=True):
                 row[h] = d[x]
                 if convert_time and (h in ['Date', 'Year', 'Month'] and re.match("^\d{4}-\d{2}-\d{2}$", d[x])):
                     row['_time'] = time.mktime(time.strptime(d[x], "%Y-%m-%d"))  # derive epoc from date
+                    if row['_time'] < 0:
+                        msg = ('quandl_dataset="%s" contains date that is prior to 1970-01-01, start of Epoc time. Conversion of date to _time will not be accurate.' % quandl_code)
+                        sys.stderr.write('%s\n' % msg)
+                        logger.warn('%s' % msg)
 
             payload.append(row)
     logger.debug('quandl2splunk data="%s"' % payload)
