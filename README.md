@@ -1,14 +1,12 @@
-[![PayPal donate button](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LQAF9WMNRAFQC "Donate once-off to this project using Paypal")
-
-#Welcome
+# Welcome
 `quandl` command for Splunk allows import of datasets found on https://www.quandl.com directly into Splunk for further processing and analysis. Gain instant access to 10s of millions of datasets across 100s of unique databases!
 
 This project is hosted on GitHub, see https://github.com/hire-vladimir/SA-quandl
 
-#Install
+# Install
 App installation is simple, and only needs to be present on the search head. Documentation around app installation can be found at http://docs.splunk.com/Documentation/AddOns/released/Overview/Singleserverinstall
 
-#Getting Started
+# Getting Started
 quandl offers many free and paid datasets; some can be accessed anonymously, while others will require an API key. More information regarding obtaining the quandl API key can be found at https://www.quandl.com/docs/api?json#api-keys
 
 *Note:* If a particular static/historic dataset is used in search, it is suggested to create a saved search that will run on a set interval of time, such that outputs of `quandl` command will output to a CSV file to be used as lookup.
@@ -17,20 +15,20 @@ quandl offers many free and paid datasets; some can be accessed anonymously, whi
 ![quandl command for splunk](https://raw.githubusercontent.com/hire-vladimir/SA-quandl/master/static/quandl.gif)
 ![quandl command for splunk example](https://raw.githubusercontent.com/hire-vladimir/SA-quandl/master/static/quandl_example.png)
 
-##System requirements
+## System requirements
 The command was tested on Splunk 6.3+ on CentOS Linux 7.1. Splunk python is used, without other dependencies, therefore command *should* work on other Splunk supported platforms.
 
-##Command syntax
+## Command syntax
 `quandl (<options>)* (<auth_key>)? "<quandl_code>"`
 
-##Command arguments (optional)
+## Command arguments (optional)
 Command implements arguments listed below. There are two types of arguments for this command, **debug**, **metadata**, **convert_time** that are unique to the command, rest are *quandl API* supported arguments; see full description and usage detail at https://www.quandl.com/docs/api?json#retrieve-data. Command fully supports *quandl v3* API.
 
 When column names such as `['Date', 'Year', 'Month']` are detected, command will attempt to convert time to epoch for use with Splunk's `_time`. If this behavior is not desired, set **convert_time=f** argument.
 
 ```debug=<bool> | metadata=<bool> | convert_time=<bool> | auth_token=<quandl_auth_token> | limit=<int> | rows=<int> | column_index=<int> | start_date=<yyyy-mm-dd> | end_date=<yyyy-mm-dd> | order=<asc|desc> | collapse=<none|daily|weekly|monthly|quarterly|annual> | transform=<none|diff|rdiff|cumul|normalize>```
 
-##Examples
+## Examples
 * Will pull down "Wiki EOD Stock Prices" dataset, https://www.quandl.com/data/WIKI, for Splunk (SPLK) stock using quandl auth_token of XXXXXXXXXXXXXXXXXXXX; auth_token option overwrites the default configured key.
 ```
 ... | quandl auth_token=XXXXXXXXXXXXXXXXXXXX "WIKI/SPLK"
@@ -56,7 +54,7 @@ When column names such as `['Date', 'Year', 'Month']` are detected, command will
 | quandl "WIKI/SPLK" | timechart span=7d latest(High) as price_high latest(Low) AS price_low
 ```
 
-#Troubleshooting
+# Troubleshooting
 This command writes log data to *$SPLUNK_HOME/var/log/splunk/quandl.log*, meaning that data is also ingested into Splunk. Magic, I know. Try searching:
 ```
 index=_internal sourcetype=quandl
@@ -67,9 +65,9 @@ When debug level logging is required, pass in *debug=true* or *debug=1* argument
 ... | quandl debug=1 "WIKI/SPLK"
 ```
 
-#Credit
+# Credit
 * Genti Zaimi, for the sweet example dashboard
 
-#Legal
+# Legal
 * *quandl* is a registered trademark of quandl.com.
 * *Splunk* is a registered trademark of Splunk, Inc.
